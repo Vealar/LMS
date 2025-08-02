@@ -1,5 +1,5 @@
-import prisma from "../../prisma/client.js";
-import { uploadFileToS3 } from "../services/s3Service.js";
+import prisma from "../../../prisma/client.js";
+import { uploadFileToS3 } from "../../services/s3Service.js";
 
 export const uploadAttachments = async (req, res) => {
     const { blockId } = req.params;
