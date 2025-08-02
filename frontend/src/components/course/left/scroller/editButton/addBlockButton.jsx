@@ -3,8 +3,12 @@ import { Button } from "@/components/ui/button.jsx";
 import { EditableContent } from "@/components/common/teacher/editableContent.jsx";
 import { Plus } from "lucide-react";
 
-const blockTypes = ["Тест", "Файл", "Теория", "Задание"];
-
+const blockTypes = [
+    ["Теория",'THEORY'],
+    ["Файл",'FILE'],
+    ["Тест",'TEST'],
+    ["Задание",'TASK']
+];
 export function AddBlockButton({ topicId, onAddBlock }) {
     return (
         <EditableContent>
@@ -26,12 +30,12 @@ export function AddBlockButton({ topicId, onAddBlock }) {
                 <PopoverContent className="w-48 space-y-1 p-2">
                     {blockTypes.map((type) => (
                         <Button
-                            key={type}
+                            key={type[0]}
                             variant="ghost"
                             className="w-full justify-start text-sm"
-                            onClick={() => onAddBlock(topicId, type)}
+                            onClick={() => onAddBlock(topicId, type[1])}
                         >
-                            {type}
+                            {type[0]}
                         </Button>
                     ))}
                 </PopoverContent>

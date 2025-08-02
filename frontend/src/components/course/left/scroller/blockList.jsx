@@ -1,3 +1,4 @@
+// BlockList.jsx
 import {
     SidebarMenuSub,
     SidebarMenuSubButton,
@@ -7,9 +8,27 @@ import {
 import { handleBlockClick } from "@/components/common/handleBlockClick.js";
 import { AddBlockButton } from "./editButton/addBlockButton.jsx";
 import { useNavigate } from "react-router-dom";
+import { useCourseMutations } from "@/features/useCourseMutations.js";
+import { toast } from "sonner";
 
-export function BlockList({ topic, onAddBlock }) {
+export function BlockList({ topic }) {
     const navigate = useNavigate();
+    const { addBlock } = useCourseMutations(topic.courseId); // передай courseId внутрь topic или пропсами
+
+    const handleAddBlock = (topicId, type) => {
+        const defaultBlock = {
+            title: type,
+            type,
+        };
+
+        addBlock.mutate(
+            { topicId, block: defaultBlock },
+            {
+                onSuccess: () => toast.success("Блок создан"),
+                onError: () => toast.error("Ошибка при создании блока"),
+            }
+        );
+    };
 
     return (
         <SidebarMenuSub>
@@ -26,7 +45,7 @@ export function BlockList({ topic, onAddBlock }) {
                 </SidebarMenuSubItem>
             ))}
 
-            <AddBlockButton topicId={topic.id} onAddBlock={onAddBlock} />
+            <AddBlockButton topicId={topic.id} onAddBlock={handleAddBlock} />
         </SidebarMenuSub>
     );
 }
