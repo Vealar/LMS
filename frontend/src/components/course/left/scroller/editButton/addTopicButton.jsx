@@ -1,5 +1,5 @@
-import {Plus} from "lucide-react"
-import {Button} from "@/components/ui/button"
+import {Plus} from "lucide-react";
+import {Button} from "@/components/ui/button";
 import {EditableContent} from "@/components/common/teacher/editableContent.jsx";
 
 export function AddTopicButton({onClick}) {
@@ -10,7 +10,7 @@ export function AddTopicButton({onClick}) {
                     onClick={onClick}
                     variant="ghost"
                     className="rounded-full px-4 py-2 text-sm font-medium text-muted-foreground bg-transparent
-                           hover:text-foreground hover:bg-primary/5 transition-colors"
+                               hover:text-foreground hover:bg-primary/5 transition-colors"
                 >
                     <div className="flex items-center gap-1.5">
                         <Plus className="w-4 h-4"/>
@@ -19,5 +19,5 @@ export function AddTopicButton({onClick}) {
                 </Button>
             </div>
         </EditableContent>
-    )
+    );
 }
