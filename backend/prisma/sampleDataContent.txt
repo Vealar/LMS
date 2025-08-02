@@ -1,0 +1,44 @@
+model Block {
+  id          Int          @id @default(autoincrement())
+  topicId     Int
+  topic       Topic        @relation(fields: [topicId], references: [id])
+  type        BlockType
+  title       String
+  description String?
+  deadline    DateTime?
+  content     Json?
+  order       Int          @default(0)
+  attachments Attachment[] // Отношение к вложениям
+  createdAt   DateTime     @default(now())
+}
+
+model Attachment {
+  id        Int      @id @default(autoincrement())
+  blockId   Int
+  block     Block    @relation(fields: [blockId], references: [id])
+  name      String // Имя файла (для отображения)
+  url       String // S3 или другая ссылка
+  createdAt DateTime @default(now())
+}
+// Пример блока THEORY content пустой
+// Пример блока TASK пустой
+// Пример блока FILE пустой
+
+// Пример блока TEST
+{
+  "durationMinutes": 30,
+  "maxAttempts": 2,
+  "questions": [
+    {
+      "question": "Что означает аббревиатура HTTP?",
+      "options": ["HyperText Transfer Protocol", "HighText Transfer Protocol", "HyperText Translate Program"],
+      "correct": 0 // индекс правильного варианта
+    },
+    {
+      "question": "Какой код означает 'Не найдено'?",
+      "options": ["200", "404", "500"],
+      "correct": 1
+    }
+  ]
+}
+

@@ -1,0 +1,120 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum Role {
+  STUDENT
+  TEACHER
+  ASSISTANT
+  ADMIN
+}
+
+enum BlockType {
+  THEORY
+  TASK
+  TEST
+  FILE
+}
+
+enum SubmissionStatus {
+  NOT_SUBMITTED
+  PENDING
+  GRADED
+}
+
+model User {
+  id        Int      @id @default(autoincrement())
+  email     String   @unique
+  password  String
+  fullName  String
+  role      Role     @default(STUDENT)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // связи
+  courses         Course[]          @relation("CourseOwner")
+  submissions     TaskSubmission[]
+  FeedbackMessage FeedbackMessage[]
+}
+
+model Course {
+  id          Int      @id @default(autoincrement())
+  title       String
+  description String?
+  ownerId     Int
+  owner       User     @relation("CourseOwner", fields: [ownerId], references: [id])
+  topics      Topic[]
+  createdAt   DateTime @default(now())
+}
+
+model Topic {
+  id        Int      @id @default(autoincrement())
+  courseId  Int
+  course    Course   @relation(fields: [courseId], references: [id])
+  title     String
+  order     Int      @default(0)
+  blocks    Block[]
+  createdAt DateTime @default(now())
+}
+
+model Block {
+  id          Int       @id @default(autoincrement())
+  topicId     Int
+  topic       Topic     @relation(fields: [topicId], references: [id])
+  type        BlockType
+  title       String
+  description String?
+  deadline    DateTime?
+  content     Json?
+  order       Int       @default(0)
+  createdAt   DateTime  @default(now())
+
+  attachments Attachment[] // Файлы, прикреплённые к блоку (например, PDF/ZIP)
+  submissions TaskSubmission[]
+}
+
+model TaskSubmission {
+  id        Int              @id @default(autoincrement())
+  taskId    Int
+  task      Block            @relation(fields: [taskId], references: [id])
+  studentId Int
+  student   User             @relation(fields: [studentId], references: [id])
+  answer    String? // текстовый ответ (можно Markdown)
+  grade     Float? // оценка
+  status    SubmissionStatus @default(NOT_SUBMITTED)
+  createdAt DateTime         @default(now())
+  updatedAt DateTime         @updatedAt
+
+  attachments Attachment[]
+  feedback    FeedbackMessage[]
+}
+
+model FeedbackMessage {
+  id           Int            @id @default(autoincrement())
+  submissionId Int
+  submission   TaskSubmission @relation(fields: [submissionId], references: [id])
+  authorId     Int
+  author       User           @relation(fields: [authorId], references: [id])
+  content      String
+  createdAt    DateTime       @default(now())
+}
+
+model Attachment {
+  id         Int      @id @default(autoincrement())
+  fileName   String
+  fileSize   Int?
+  mimeType   String?
+  url        String // ссылка на S3
+  uploadedAt DateTime @default(now())
+
+  // связи (может быть связано либо с блоком, либо с сабмишеном)
+  blockId      Int?
+  block        Block?          @relation(fields: [blockId], references: [id])
+  submissionId Int?
+  submission   TaskSubmission? @relation(fields: [submissionId], references: [id])
+}
