@@ -1,8 +1,8 @@
 import prisma from "../../../prisma/client.js";
-import { uploadFileToS3 } from "../../services/s3Service.js";
+import {uploadFileToS3} from "../../services/s3Service.js";
 
 export const uploadAttachments = async (req, res) => {
-    const { blockId } = req.params;
+    const {blockId} = req.params;
     const files = req.files || [];
 
     try {
@@ -20,9 +20,9 @@ export const uploadAttachments = async (req, res) => {
             })),
         });
 
-        res.json({ success: true, count: created.count });
+        res.json({success: true, count: created.count});
     } catch (err) {
         console.error("Ошибка при загрузке файлов к блоку:", err);
-        res.status(500).json({ error: "Ошибка при загрузке файлов" });
+        res.status(500).json({error: "Ошибка при загрузке файлов"});
     }
 };

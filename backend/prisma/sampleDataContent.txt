@@ -20,11 +20,6 @@ model Attachment {
   url       String // S3 или другая ссылка
   createdAt DateTime @default(now())
 }
-// Пример блока THEORY content пустой
-// Пример блока TASK пустой
-// Пример блока FILE пустой
-
-// Пример блока TEST
 {
   "durationMinutes": 30,
   "maxAttempts": 2,

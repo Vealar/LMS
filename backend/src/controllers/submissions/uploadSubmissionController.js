@@ -1,19 +1,17 @@
-import { uploadFileToS3 } from "../../services/s3Service.js";
+import {uploadFileToS3} from "../../services/s3Service.js";
 import prisma from "../../../prisma/client.js";
 
 export const submitTask = async (req, res) => {
-    const { taskId } = req.params;
+    const {taskId} = req.params;
     const studentId = 1//req.user.id; // предполагается auth middleware
-    const { text } = req.body;
+    const {text} = req.body;
     const files = req.files || [];
 
     try {
-        // Сохраняем файлы в S3
         const uploadedFiles = await Promise.all(
             files.map((file) => uploadFileToS3(file, `student/${studentId}`))
         );
 
-        // Создаём TaskSubmission
         const submission = await prisma.taskSubmission.create({
             data: {
                 taskId: Number(taskId),
@@ -35,6 +33,6 @@ export const submitTask = async (req, res) => {
         res.json(submission);
     } catch (err) {
         console.error("Ошибка при отправке задания:", err);
-        res.status(500).json({ error: "Ошибка при отправке задания" });
+        res.status(500).json({error: "Ошибка при отправке задания"});
     }
 };

@@ -22,7 +22,7 @@ export const getCourseStructure = async (courseId) => {
                     blocks: {
                         orderBy: {order: 'asc'},
                         include: {
-                            attachments: true, // можно исключить для экономии
+                            attachments: true,
                         },
                     },
                 },
@@ -76,7 +76,7 @@ export const updateBlock = async (blockId, updates) => {
             ...(type && {type}),
             ...(content && {content}),
             ...(description !== undefined && {description}),
-            ...(deadline !== undefined  && {deadline}),
+            ...(deadline !== undefined && {deadline}),
         },
     });
 };
@@ -114,7 +114,6 @@ export const deleteBlock = async (blockId) => {
 };
 
 export const deleteTopic = async (topicId) => {
-    // удаляем attachments всех блоков темы
     const blocks = await prisma.block.findMany({
         where: {topicId},
         select: {id: true},

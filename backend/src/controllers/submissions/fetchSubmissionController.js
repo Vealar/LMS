@@ -1,8 +1,7 @@
-// controllers/taskSubmissionController.js
 import prisma from "../../../prisma/client.js";
 
 export const fetchSubmission = async (req, res) => {
-    const { taskId } = req.params;
+    const {taskId} = req.params;
     const studentId = 1; // req.user.id — заменить при подключении auth
 
     try {
@@ -27,12 +26,12 @@ export const fetchSubmission = async (req, res) => {
         });
 
         if (!submission) {
-            return res.status(404).json({ message: "Submission not found" });
+            return res.status(404).json({message: "Submission not found"});
         }
 
         res.json(submission);
     } catch (error) {
         console.error("Ошибка при получении отправки задания:", error);
-        res.status(500).json({ error: "Не удалось получить отправку задания" });
+        res.status(500).json({error: "Не удалось получить отправку задания"});
     }
 };
