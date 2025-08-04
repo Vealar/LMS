@@ -6,6 +6,7 @@ import {
     useUploadBlockAttachments,
     useDeleteAttachment,
 } from "@/features/useBlockAttachments.js";
+import { openOrDownloadFile } from "@/components/common/openOrDownloadFile.js";
 
 export function AttachmentManager({ blockId, editing }) {
     const {
@@ -49,12 +50,14 @@ export function AttachmentManager({ blockId, editing }) {
                 <ul className="text-sm space-y-1 mt-1">
                     {attachments.map((file) => (
                         <li key={file.id} className="flex items-center justify-between gap-2">
-                            <div className="flex items-center gap-2">
+                            <div
+                                className="flex items-center gap-2 cursor-pointer underline"
+                                onClick={() => openOrDownloadFile({ url: file.url, fileName: file.fileName })}
+                            >
                                 <Paperclip className="w-4 h-4" />
-                                <a href={file.url} className="underline" target="_blank" rel="noreferrer">
-                                    {file.fileName}
-                                </a>
+                                <span>{file.fileName}</span>
                             </div>
+
                             {editing && (
                                 <Button
                                     variant="ghost"

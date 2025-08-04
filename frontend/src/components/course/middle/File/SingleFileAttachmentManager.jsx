@@ -1,12 +1,13 @@
-import { Button } from "@/components/ui/button";
-import { Paperclip, Trash2 } from "lucide-react";
-import { toast } from "sonner";
+import {Button} from "@/components/ui/button";
+import {Paperclip, Trash2} from "lucide-react";
+import {toast} from "sonner";
 import {
     useUploadBlockAttachments,
     useDeleteAttachment,
 } from "@/features/useBlockAttachments";
+import {openOrDownloadFile} from "@/components/common/openOrDownloadFile.js";
 
-export default function SingleFileAttachmentManager({ blockId, attachment, editing }) {
+export default function SingleFileAttachmentManager({blockId, attachment, editing}) {
     const upload = useUploadBlockAttachments(blockId);
     const remove = useDeleteAttachment(blockId);
 
@@ -15,7 +16,7 @@ export default function SingleFileAttachmentManager({ blockId, attachment, editi
         if (!files || files.length === 0) return;
 
         const formData = new FormData();
-        formData.append("files", files[0]); // только один файл
+        formData.append("files", files[0]);
 
         upload.mutate(formData, {
             onSuccess: () => toast.success("Файл загружен"),
@@ -37,11 +38,12 @@ export default function SingleFileAttachmentManager({ blockId, attachment, editi
 
             {attachment ? (
                 <div className="flex items-center justify-between gap-2 mt-2">
-                    <div className="flex items-center gap-2">
-                        <Paperclip className="w-4 h-4" />
-                        <a href={attachment.url} className="underline" target="_blank" rel="noreferrer">
-                            {attachment.fileName}
-                        </a>
+                    <div
+                        className="flex items-center gap-2 cursor-pointer underline"
+                        onClick={() => openOrDownloadFile({url: attachment.url, fileName: attachment.fileName})}
+                    >
+                        <Paperclip className="w-4 h-4"/>
+                        <span>{attachment.fileName}</span>
                     </div>
 
                     {editing && (
@@ -51,7 +53,7 @@ export default function SingleFileAttachmentManager({ blockId, attachment, editi
                             className="text-destructive"
                             onClick={handleDelete}
                         >
-                            <Trash2 className="w-4 h-4" />
+                            <Trash2 className="w-4 h-4"/>
                         </Button>
                     )}
                 </div>

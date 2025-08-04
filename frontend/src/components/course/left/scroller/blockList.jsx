@@ -5,16 +5,16 @@ import {
 } from "@/components/ui/sidebar.jsx";
 
 import {useEditing} from "@/components/context/editingContext";
-
 import {AddBlockButton} from "./editButton/addBlockButton.jsx";
 import {useNavigate} from "react-router-dom";
 import {useCourseMutations} from "@/features/useCourseMutations.js";
 import {toast} from "sonner";
+import {openOrDownloadFile} from "@/components/common/openOrDownloadFile.js";
 
 export function BlockList({topic}) {
     const navigate = useNavigate();
     const {addBlock} = useCourseMutations(topic.courseId);
-    const {editing} = useEditing(); // ← вот тут берём состояние
+    const {editing} = useEditing();
 
     const handleAddBlock = (topicId, type) => {
         const defaultBlock = {
@@ -30,23 +30,19 @@ export function BlockList({topic}) {
             }
         );
     };
-    const handleClick = (block) => {
-        if (!editing && block.type === "FILE" && block.attachments?.[0]?.url) {
-            const url = block.attachments[0].url;
 
-            const link = document.createElement("a");
-            link.href = url;
-            link.target = "_blank";
-            link.rel = "noopener noreferrer";
-            link.click();
+    const handleClick = (e, block) => {
+        e.preventDefault();
+        e.stopPropagation();
 
+        if (!editing && block.type === "FILE" && block.attachments?.length > 0) {
+            const file = block.attachments[0];
+            openOrDownloadFile({url: file.url, fileName: file.fileName});
             return;
         }
 
-        //TODO настроить курс
-        navigate(`/courses/${1}/topics/${topic.id}/blocks/${block.id}`);
-    }
-
+        navigate(`/courses/${topic.courseId}/topics/${topic.id}/blocks/${block.id}`);
+    };
 
     return (
         <SidebarMenuSub>
@@ -56,7 +52,7 @@ export function BlockList({topic}) {
                         <button
                             type="button"
                             className="w-full text-left"
-                            onClick={() => handleClick(block)}
+                            onClick={(e) => handleClick(e, block)}
                         >
                             <span>{block.title}</span>
                         </button>
