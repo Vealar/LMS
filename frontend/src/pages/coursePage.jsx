@@ -1,5 +1,4 @@
 import {useParams, Outlet} from "react-router-dom"
-import {useState} from "react"
 import {CourseAppSidebar} from "@/components/course/left/courseAppSidebar.jsx"
 import {useCourseStructure} from "@/features/useCourseStructure.js"
 import {

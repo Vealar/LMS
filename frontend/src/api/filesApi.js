@@ -14,6 +14,11 @@ export const fetchBlockAttachments = async (blockId) => {
     return res.data;
 };
 
+export const deleteAttachment = async (attachmentId) => {
+    const res = await instance.delete(`/files/attachments/${attachmentId}`);
+    return res.data;
+};
+
 export const submitTask = async (taskId, formData) => {
     const res = await instance.post(
         `/files/tasks/${taskId}/submission`,

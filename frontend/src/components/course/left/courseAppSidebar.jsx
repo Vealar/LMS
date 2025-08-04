@@ -1,9 +1,6 @@
-import {useParams} from "react-router-dom";
-import {useCourseStructure} from "@/features/useCourseStructure.js";
 import {
     Sidebar,
     SidebarContent,
-    SidebarFooter,
     SidebarHeader,
     SidebarRail,
     SidebarSeparator,

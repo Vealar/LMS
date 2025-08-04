@@ -1,7 +1,7 @@
-import prisma from "../../prisma/client.js";
+import prisma from "../../../prisma/client.js";
 
 export const fetchAttachments = async (req, res) => {
-    const { blockId } = req.params;
+    const {blockId} = req.params;
 
     try {
         const attachments = await prisma.attachment.findMany({
@@ -21,6 +21,6 @@ export const fetchAttachments = async (req, res) => {
         res.json(attachments);
     } catch (error) {
         console.error("Ошибка при получении файлов блока:", error);
-        res.status(500).json({ error: "Не удалось получить файлы" });
+        res.status(500).json({error: "Не удалось получить файлы"});
     }
 };

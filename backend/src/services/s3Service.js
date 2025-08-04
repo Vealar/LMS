@@ -3,7 +3,7 @@ import {
     PutObjectCommand,
     DeleteObjectCommand,
 } from "@aws-sdk/client-s3";
-import { v4 as uuidv4 } from "uuid";
+import {v4 as uuidv4} from "uuid";
 import fs from "fs";
 import path from "path";
 import dotenv from "dotenv";
@@ -22,7 +22,6 @@ const s3 = new S3Client({
 
 const BUCKET = process.env.S3_BUCKET;
 
-// Загрузка файла в S3
 export async function uploadFileToS3(file, prefix = "uploads") {
     const fileStream = fs.createReadStream(file.path);
     const fileExt = path.extname(file.originalname);
@@ -43,7 +42,6 @@ export async function uploadFileToS3(file, prefix = "uploads") {
     };
 }
 
-// Удаление одного файла из S3 по полному URL
 export async function deleteFileFromS3(fileUrl) {
     const key = extractKeyFromUrl(fileUrl);
 
@@ -57,7 +55,6 @@ export async function deleteFileFromS3(fileUrl) {
     await s3.send(new DeleteObjectCommand(params));
 }
 
-// 🔧 Парсер ключа из полного URL
 function extractKeyFromUrl(url) {
     const prefix = `${process.env.S3_ENDPOINT}/${BUCKET}/`;
     return url.startsWith(prefix) ? url.replace(prefix, "") : null;

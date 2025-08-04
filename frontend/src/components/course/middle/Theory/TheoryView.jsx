@@ -1,43 +1,37 @@
-import { Card } from "@/components/ui/card.jsx"
-import { Paperclip } from "lucide-react"
-import {EditableContent} from "@/components/common/teacher/editableContent.jsx";
+import {Card} from "@/components/ui/card.jsx";
+import {useEditing} from "@/components/context/editingContext.jsx";
+import {useCourseMutations} from "@/features/useCourseMutations.js";
 
-export default function TheoryView({ theory }) {
-    const {
-        title,
-        description,
-        attachments,
-    } = theory
+import {EditableMetaForm} from "@/components/course/middle/commonElements/EditableMetaForm.jsx";
+import {EditableTitle} from "@/components/course/middle/commonElements/EditableTitle.jsx";
+import {EditableDescription} from "@/components/course/middle/commonElements/EditableDescription.jsx";
+import {AttachmentManager} from "@/components/course/middle/commonElements/AttachmentManager.jsx";
+import {useMeta} from "@/components/course/middle/commonElements/EditableMetaForm.jsx";
+
+export function TheoryMetaSection() {
+    const {title, setTitle, description, setDescription, editing} = useMeta();
+
+    return (
+        <>
+            <EditableTitle value={title} editing={editing} onChange={setTitle}/>
+            <EditableDescription value={description} editing={editing} onChange={setDescription}/>
+        </>
+    );
+}
+
+export default function TheoryView({theory}) {
+    const {editing} = useEditing();
+    const {updateBlock} = useCourseMutations(theory.courseId);
 
     return (
         <div className="w-full mx-auto px-6 mt-8">
             <Card className="rounded-xl p-6 bg-muted/50 space-y-6">
-                {/* Название */}
-                <h1 className="text-2xl font-semibold">{title}</h1>
+                <EditableMetaForm block={theory} editing={editing} updateBlock={updateBlock}>
+                    <TheoryMetaSection/>
+                </EditableMetaForm>
 
-                {/* Описание */}
-                <div>
-                    <h4 className="text-sm font-medium text-muted-foreground">Описание</h4>
-                    <p className="text-sm mt-1 whitespace-pre-line">{description}</p>
-                </div>
-
-                {/* Прикрепленные файлы */}
-                {attachments?.length > 0 && (
-                    <div>
-                        <h4 className="text-sm font-medium text-muted-foreground">Прикрепленные файлы</h4>
-                        <ul className="text-sm space-y-1 mt-1">
-                            {attachments.map((file, idx) => (
-                                <li key={idx} className="flex items-center gap-2">
-                                    <Paperclip className="w-4 h-4" />
-                                    <a href={file.url} className="underline" target="_blank" rel="noreferrer">
-                                        {file.name}
-                                    </a>
-                                </li>
-                            ))}
-                        </ul>
-                    </div>
-                )}
+                <AttachmentManager blockId={theory.id} editing={editing}/>
             </Card>
         </div>
-    )
+    );
 }

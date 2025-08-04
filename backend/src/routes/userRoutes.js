@@ -4,7 +4,7 @@ const authMiddleware = require("../middleware/authMiddleware");
 
 router.get("/me", authMiddleware, async (req, res) => {
 
-    res.json({ user: req.user });
+    res.json({user: req.user});
 });
 
 module.exports = router;
