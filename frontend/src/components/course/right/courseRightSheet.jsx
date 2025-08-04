@@ -73,7 +73,6 @@ export function CourseRightSheet({ user }) {
                 </div>
 
                 {/* Выход */}
-                {/* Выход */}
                 <div className="pt-4 border-t mt-4">
                     <button
                         onClick={handleLogout}

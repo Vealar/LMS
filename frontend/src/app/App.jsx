@@ -15,7 +15,6 @@ function PrivateRoute({children}) {
 export default function App() {
     return (
         <Routes>
-            {/* Login and Register use the same page with different modes */}
             <Route path="/login" element={<AuthPage mode="login"/>}/>
             <Route path="/register" element={<AuthPage mode="register"/>}/>
 

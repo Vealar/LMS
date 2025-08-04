@@ -1,9 +1,8 @@
-// src/components/context/editingContext.jsx
-import { createContext, useContext, useState, useEffect } from "react"
+import {createContext, useContext, useState, useEffect} from "react"
 
 const EditingContext = createContext()
 
-export const EditingProvider = ({ children }) => {
+export const EditingProvider = ({children}) => {
     const [editing, setEditing] = useState(false)
 
     useEffect(() => {
@@ -16,7 +15,7 @@ export const EditingProvider = ({ children }) => {
     }, [editing])
 
     return (
-        <EditingContext.Provider value={{ editing, setEditing }}>
+        <EditingContext.Provider value={{editing, setEditing}}>
             {children}
         </EditingContext.Provider>
     )

@@ -10,7 +10,6 @@ import TaskHeader from "@/components/course/middle/Task/TaskHeader.jsx";
 import {Button} from "@/components/ui/button.jsx";
 import TaskDescription from "@/components/course/middle/Task/TaskDescription.jsx";
 import {EditableDescription} from "@/components/course/middle/commonElements/EditableDescription.jsx";
-import TaskAttachments from "@/components/course/middle/Task/TaskAttachments.jsx";
 import TaskSubmissionForm from "@/components/course/middle/Task/TaskSubmission/TaskSubmissionForm.jsx";
 import TaskFeedback from "@/components/course/middle/Task/TaskFeedback.jsx";
 import ConfirmDialog from "@/components/course/middle/Task/TaskSubmission/ConfirmDialog.jsx";

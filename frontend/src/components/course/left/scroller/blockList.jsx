@@ -6,7 +6,6 @@ import {
 
 import {useEditing} from "@/components/context/editingContext";
 
-import {handleBlockClick} from "@/components/common/handleBlockClick.js";
 import {AddBlockButton} from "./editButton/addBlockButton.jsx";
 import {useNavigate} from "react-router-dom";
 import {useCourseMutations} from "@/features/useCourseMutations.js";
