@@ -1,12 +1,12 @@
 import prisma from '../../prisma/client.js';
 
-export async function createCourse({ title, description, ownerId }) {
+export async function createCourse({title, description, ownerId}) {
     return prisma.course.create({
         data: {
             title,
             description,
             owner: {
-                connect: { id: ownerId },
+                connect: {id: ownerId},
             },
         },
     });
@@ -14,13 +14,13 @@ export async function createCourse({ title, description, ownerId }) {
 
 export const getCourseStructure = async (courseId) => {
     return prisma.course.findUnique({
-        where: { id: courseId },
+        where: {id: courseId},
         include: {
             topics: {
-                orderBy: { order: 'asc' },
+                orderBy: {order: 'asc'},
                 include: {
                     blocks: {
-                        orderBy: { order: 'asc' },
+                        orderBy: {order: 'asc'},
                         include: {
                             attachments: true, // можно исключить для экономии
                         },
@@ -32,7 +32,7 @@ export const getCourseStructure = async (courseId) => {
 };
 
 export const addTopic = async (courseId, title) => {
-    const count = await prisma.topic.count({ where: { courseId } });
+    const count = await prisma.topic.count({where: {courseId}});
 
     return prisma.topic.create({
         data: {
@@ -44,7 +44,7 @@ export const addTopic = async (courseId, title) => {
 };
 
 export const addBlockToTopic = async (topicId, blockData) => {
-    const count = await prisma.block.count({ where: { topicId } });
+    const count = await prisma.block.count({where: {topicId}});
 
     return prisma.block.create({
         data: {
@@ -60,6 +60,7 @@ export const addBlockToTopic = async (topicId, blockData) => {
 };
 
 export const updateBlock = async (blockId, updates) => {
+    console.log(updates);
     const {
         title,
         type,
@@ -69,20 +70,20 @@ export const updateBlock = async (blockId, updates) => {
     } = updates;
 
     return prisma.block.update({
-        where: { id: blockId },
+        where: {id: blockId},
         data: {
-            ...(title && { title }),
-            ...(type && { type }),
-            ...(content && { content }),
-            ...(description !== undefined && { description }),
-            ...(deadline !== undefined && { deadline }),
+            ...(title && {title}),
+            ...(type && {type}),
+            ...(content && {content}),
+            ...(description !== undefined && {description}),
+            ...(deadline !== undefined  && {deadline}),
         },
     });
 };
 
 export const updateTopic = async (topicId, updates) => {
     return prisma.topic.update({
-        where: { id: topicId },
+        where: {id: topicId},
         data: updates,
     });
 };
@@ -90,8 +91,8 @@ export const updateTopic = async (topicId, updates) => {
 export const reorderTopics = async (courseId, orderedIds) => {
     const updates = orderedIds.map((id, index) =>
         prisma.topic.update({
-            where: { id },
-            data: { order: index },
+            where: {id},
+            data: {order: index},
         })
     );
     await prisma.$transaction(updates);
@@ -100,45 +101,45 @@ export const reorderTopics = async (courseId, orderedIds) => {
 export const reorderBlocks = async (topicId, orderedIds) => {
     const updates = orderedIds.map((id, index) =>
         prisma.block.update({
-            where: { id },
-            data: { order: index },
+            where: {id},
+            data: {order: index},
         })
     );
     await prisma.$transaction(updates);
 };
 
 export const deleteBlock = async (blockId) => {
-    await prisma.attachment.deleteMany({ where: { blockId } });
-    return prisma.block.delete({ where: { id: blockId } });
+    await prisma.attachment.deleteMany({where: {blockId}});
+    return prisma.block.delete({where: {id: blockId}});
 };
 
 export const deleteTopic = async (topicId) => {
     // удаляем attachments всех блоков темы
     const blocks = await prisma.block.findMany({
-        where: { topicId },
-        select: { id: true },
+        where: {topicId},
+        select: {id: true},
     });
 
     const blockIds = blocks.map(b => b.id);
 
     await prisma.attachment.deleteMany({
         where: {
-            blockId: { in: blockIds },
+            blockId: {in: blockIds},
         },
     });
 
     await prisma.block.deleteMany({
-        where: { topicId },
+        where: {topicId},
     });
 
     return prisma.topic.delete({
-        where: { id: topicId },
+        where: {id: topicId},
     });
 };
 
 export const getBlockById = async (blockId, userId) => {
     const block = await prisma.block.findUnique({
-        where: { id: Number(blockId) },
+        where: {id: Number(blockId)},
         include: {
             topic: {
                 select: {
@@ -164,7 +165,7 @@ export const getBlockById = async (blockId, userId) => {
                 feedback: {
                     include: {
                         author: {
-                            select: { id: true, fullName: true, role: true },
+                            select: {id: true, fullName: true, role: true},
                         },
                     },
                 },
