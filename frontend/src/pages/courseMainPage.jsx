@@ -1,12 +1,24 @@
-import { useParams } from "react-router-dom";
-import { useBlockData } from "@/features/useBlockData.js";
+import { useEffect } from "react";
+import { useNavigate, useParams } from "react-router-dom";
+import { useEditing } from "@/components/context/editingContext";
+import { useBlockData } from "@/features/useBlockData";
+
 import TheoryView from "@/components/course/middle/Theory/TheoryView.jsx";
-import TestView from "@/components/course/middle/Test/TestView.jsx";
 import TaskView from "@/components/course/middle/Task/TaskView.jsx";
+import TestView from "@/components/course/middle/Test/TestView.jsx";
+import FileView from "@/components/course/middle/File/FileView.jsx";
 
 export default function CourseMainPage() {
-    const { blockId } = useParams();
+    const { blockId, courseId } = useParams();
     const { data, isLoading } = useBlockData(blockId);
+    const { editing } = useEditing();
+    const navigate = useNavigate();
+
+    useEffect(() => {
+        if (!editing && data?.type === "FILE") {
+            navigate(`/courses/${courseId}`, { replace: true });
+        }
+    }, [editing, data, courseId, navigate]);
 
     if (isLoading) return <div>Загрузка материала...</div>;
     if (!data) return <div>Материал не найден</div>;
@@ -19,11 +31,7 @@ export default function CourseMainPage() {
         case "TEST":
             return <TestView test={data.content} />;
         case "FILE":
-            if (data.attachments?.length > 0) {
-                const firstFileUrl = data.attachments[0].url;
-                window.open(firstFileUrl, "_blank");
-            }
-            return null;
+            return editing ? <FileView fileBlock={data} /> : null;
         default:
             return <div>Неизвестный тип блока: {data.type}</div>;
     }
