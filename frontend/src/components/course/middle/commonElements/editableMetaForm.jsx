@@ -9,11 +9,16 @@ export function EditableMetaForm({ block, editing, updateBlock, children }) {
     const [description, setDescription] = useState(block.description || "");
     const [deadline, setDeadline] = useState(block.deadline || null);
     const [dirty, setDirty] = useState(false);
+    const [attempts, setAttempts] = useState(block.content?.attempts || 1);
+    const [timeLimit, setTimeLimit] = useState(block.content?.timeLimit || 30);
+
 
     useEffect(() => {
         setTitle(block.title);
         setDescription(block.description || "");
         setDeadline(block.deadline || null);
+        setAttempts(block.content?.attempts || 1);
+        setTimeLimit(block.content?.timeLimit || 30);
         setDirty(false);
     }, [block]);
 
@@ -25,6 +30,11 @@ export function EditableMetaForm({ block, editing, updateBlock, children }) {
                     title,
                     description,
                     deadline: deadline === "" ? null : deadline,
+                    content: {
+                        ...block.content,
+                        attempts,
+                        timeLimit,
+                    },
                 },
             },
             {
@@ -53,6 +63,16 @@ export function EditableMetaForm({ block, editing, updateBlock, children }) {
         deadline,
         setDeadline: (v) => {
             setDeadline(v);
+            setDirty(true);
+        },
+        attempts,
+        setAttempts: (v) => {
+            setAttempts(v);
+            setDirty(true);
+        },
+        timeLimit,
+        setTimeLimit: (v) => {
+            setTimeLimit(v);
             setDirty(true);
         },
         editing,

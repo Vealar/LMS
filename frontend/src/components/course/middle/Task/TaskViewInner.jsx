@@ -1,19 +1,19 @@
 import {submitTask} from "@/api/filesApi.js";
-import {useMeta} from "@/components/course/middle/commonElements/EditableMetaForm.jsx";
+import {useMeta} from "@/components/course/middle/commonElements/editableMetaForm.jsx";
 import {useQueryClient} from "@tanstack/react-query";
 import {useState} from "react";
 import {toast} from "sonner";
 import {Card} from "@/components/ui/card.jsx";
-import {EditableDeadline} from "@/components/course/middle/commonElements/EditableDeadline.jsx";
-import {EditableTitle} from "@/components/course/middle/commonElements/EditableTitle.jsx";
+import {EditableDeadline} from "@/components/course/middle/commonElements/editableDeadline.jsx";
+import {EditableTitle} from "@/components/course/middle/commonElements/editableTitle.jsx";
 import TaskHeader from "@/components/course/middle/Task/TaskHeader.jsx";
 import {Button} from "@/components/ui/button.jsx";
 import TaskDescription from "@/components/course/middle/Task/TaskDescription.jsx";
-import {EditableDescription} from "@/components/course/middle/commonElements/EditableDescription.jsx";
+import {EditableDescription} from "@/components/course/middle/commonElements/editableDescription.jsx";
 import TaskSubmissionForm from "@/components/course/middle/Task/TaskSubmission/TaskSubmissionForm.jsx";
 import TaskFeedback from "@/components/course/middle/Task/TaskFeedback.jsx";
 import ConfirmDialog from "@/components/course/middle/Task/TaskSubmission/ConfirmDialog.jsx";
-import {AttachmentManager} from "@/components/course/middle/commonElements/AttachmentManager.jsx";
+import {AttachmentManager} from "@/components/course/middle/commonElements/attachmentManager.jsx";
 
 export function TaskViewInner({ task }) {
     const {

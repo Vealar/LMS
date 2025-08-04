@@ -2,9 +2,9 @@ import { Card } from "@/components/ui/card";
 import { useEditing } from "@/components/context/editingContext";
 import { useCourseMutations } from "@/features/useCourseMutations";
 
-import { EditableMetaForm } from "@/components/course/middle/commonElements/EditableMetaForm";
-import { EditableTitle } from "@/components/course/middle/commonElements/EditableTitle";
-import { useMeta } from "@/components/course/middle/commonElements/EditableMetaForm";
+import { EditableMetaForm } from "@/components/course/middle/commonElements/editableMetaForm.jsx";
+import { EditableTitle } from "@/components/course/middle/commonElements/editableTitle.jsx";
+import { useMeta } from "@/components/course/middle/commonElements/editableMetaForm.jsx";
 
 import SingleFileAttachmentManager from "./SingleFileAttachmentManager";
 
