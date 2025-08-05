@@ -3,7 +3,7 @@ import prisma from "../../../prisma/client.js";
 
 export const submitTask = async (req, res) => {
     const {taskId} = req.params;
-    const studentId = 1//req.user.id; // предполагается auth middleware
+    const studentId = req.user?.id;
     const {text} = req.body;
     const files = req.files || [];
 
