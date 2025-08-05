@@ -39,6 +39,7 @@ model User {
   courses         Course[]          @relation("CourseOwner")
   submissions     TaskSubmission[]
   FeedbackMessage FeedbackMessage[]
+  TestSubmission  TestSubmission[]
 }
 
 model Course {
@@ -73,8 +74,9 @@ model Block {
   order       Int       @default(0)
   createdAt   DateTime  @default(now())
 
-  attachments Attachment[]
-  submissions TaskSubmission[]
+  attachments    Attachment[]
+  submissions    TaskSubmission[]
+  TestSubmission TestSubmission[]
 }
 
 model TaskSubmission {
@@ -116,4 +118,20 @@ model Attachment {
   block        Block?          @relation(fields: [blockId], references: [id])
   submissionId Int?
   submission   TaskSubmission? @relation(fields: [submissionId], references: [id])
+}
+
+model TestSubmission {
+  id        Int   @id @default(autoincrement())
+  taskId    Int
+  task      Block @relation(fields: [taskId], references: [id])
+  studentId Int
+  student   User  @relation(fields: [studentId], references: [id])
+
+  // JSON структура: { [questionId]: answer }, где answer: string | string[]
+  answers Json
+
+  grade     Float? // оценка
+  status    SubmissionStatus @default(NOT_SUBMITTED)
+  createdAt DateTime         @default(now())
+  updatedAt DateTime         @updatedAt
 }

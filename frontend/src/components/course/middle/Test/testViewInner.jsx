@@ -27,7 +27,6 @@ export function TestViewInner({ test }) {
     const [started, setStarted] = useState(false);
     const { updateBlock } = useCourseMutations(test.courseId);
 
-    // подгружаем вопросы из content
     const questions = test.content?.questions || [];
 
     return (
