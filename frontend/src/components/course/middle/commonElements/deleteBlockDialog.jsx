@@ -7,12 +7,12 @@ export default function DeleteBlockDialog({ open, onOpenChange, onConfirm }) {
     const [confirmText, setConfirmText] = useState("");
 
     useEffect(() => {
-        if (!open) setConfirmText(""); // очищаем поле при закрытии
+        if (!open) setConfirmText("");
     }, [open]);
 
     const handleConfirm = async () => {
-        await onConfirm();           // дождись удаления
-        onOpenChange(false);         // и только потом закрывай
+        await onConfirm();
+        onOpenChange(false);
     };
 
     return (
