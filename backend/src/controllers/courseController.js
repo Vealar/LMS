@@ -30,7 +30,7 @@ export const getStructure = async (req, res) => {
 
 export const getBlockById = async (req, res) => {
     const {blockId} = req.params;
-    const userId = req.user?.id; // TODO заменить на const userId = req.user?.id;
+    const userId = req.user?.id;
 
     if (isNaN(blockId)) {
         return res.status(400).json({error: "Некорректный ID блока"});

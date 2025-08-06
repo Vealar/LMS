@@ -60,7 +60,7 @@ export const addBlockToTopic = async (topicId, blockData) => {
 };
 
 export const updateBlock = async (blockId, updates) => {
-    console.log(updates);
+
     const {
         title,
         type,

@@ -3,7 +3,7 @@ import prisma from "../../../prisma/client.js";
 
 export const updateSubmission = async (req, res) => {
     const {taskId} = req.params;
-    const studentId = 1; // Заменить на req.user.id после подключения auth
+    const studentId = req.user?.id;
 
     const text = req.body.text ?? "";
     let removeFileIds = [];

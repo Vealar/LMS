@@ -1,35 +1,38 @@
-import { Card } from "@/components/ui/card";
-import { useEditing } from "@/components/context/editingContext";
-import { useCourseMutations } from "@/features/useCourseMutations";
+import {Card} from "@/components/ui/card";
+import {useEditing} from "@/components/context/editingContext";
+import {useCourseMutations} from "@/features/useCourseMutations";
 
-import { EditableMetaForm } from "@/components/course/middle/commonElements/EditableMetaForm";
-import { EditableTitle } from "@/components/course/middle/commonElements/EditableTitle";
-import { useMeta } from "@/components/course/middle/commonElements/EditableMetaForm";
+import {EditableMetaForm} from "@/components/course/middle/commonElements/editableMetaForm.jsx";
+import {EditableTitle} from "@/components/course/middle/commonElements/editableTitle.jsx";
+import {useMeta} from "@/components/course/middle/commonElements/editableMetaForm.jsx";
 
 import SingleFileAttachmentManager from "./SingleFileAttachmentManager";
+import {useDeleteBlockWithDialog} from "@/features/useDeleteBlockWithDialog.jsx";
 
-export default function FileView({ fileBlock }) {
-    const { editing } = useEditing();
-    const { updateBlock } = useCourseMutations(fileBlock.courseId);
+export default function FileView({fileBlock}) {
+    const {editing} = useEditing();
+    const {updateBlock} = useCourseMutations(fileBlock.courseId);
+    const {renderDeleteButton} = useDeleteBlockWithDialog(fileBlock);
 
     return (
         <div className="w-full mx-auto px-6 mt-8">
             <Card className="rounded-xl p-6 bg-muted/50 space-y-4">
                 <EditableMetaForm block={fileBlock} editing={editing} updateBlock={updateBlock}>
-                    <FileEditor blockId={fileBlock.id} attachment={fileBlock.attachments?.[0]} />
+                    <FileEditor blockId={fileBlock.id} attachment={fileBlock.attachments?.[0]}/>
                 </EditableMetaForm>
             </Card>
+            {renderDeleteButton(editing)}
         </div>
     );
 }
 
-function FileEditor({ blockId, attachment }) {
-    const { title, setTitle, editing } = useMeta();
+function FileEditor({blockId, attachment}) {
+    const {title, setTitle, editing} = useMeta();
 
     return (
         <>
-            <EditableTitle value={title} editing={editing} onChange={setTitle} />
-            <SingleFileAttachmentManager blockId={blockId} attachment={attachment} editing={editing} />
+            <EditableTitle value={title} editing={editing} onChange={setTitle}/>
+            <SingleFileAttachmentManager blockId={blockId} attachment={attachment} editing={editing}/>
         </>
     );
 }

@@ -3,9 +3,9 @@ import { useNavigate, useParams } from "react-router-dom";
 import { useEditing } from "@/components/context/editingContext";
 import { useBlockData } from "@/features/useBlockData";
 
-import TheoryView from "@/components/course/middle/Theory/TheoryView.jsx";
+import TheoryView from "@/components/course/middle/Theory/theoryView.jsx";
 import TaskView from "@/components/course/middle/Task/TaskView.jsx";
-import TestView from "@/components/course/middle/Test/TestView.jsx";
+import TestView from "@/components/course/middle/Test/testView.jsx";
 import FileView from "@/components/course/middle/File/FileView.jsx";
 
 export default function CourseMainPage() {
@@ -29,7 +29,7 @@ export default function CourseMainPage() {
         case "TASK":
             return <TaskView task={data} />;
         case "TEST":
-            return <TestView test={data.content} />;
+            return <TestView test={data} />;
         case "FILE":
             return editing ? <FileView fileBlock={data} /> : null;
         default:

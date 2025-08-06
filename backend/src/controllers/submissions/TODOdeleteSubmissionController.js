@@ -3,7 +3,7 @@ import {deleteFileFromS3} from "../../services/s3Service.js";
 
 export const deleteSubmission = async (req, res) => {
     const {taskId} = req.params;
-    const studentId = 1; // TODO заменить на const userId = req.user?.id;
+    const studentId = req.user?.id;
 
     try {
         const submission = await prisma.taskSubmission.findFirst({

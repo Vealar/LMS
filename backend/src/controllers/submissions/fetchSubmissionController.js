@@ -2,7 +2,7 @@ import prisma from "../../../prisma/client.js";
 
 export const fetchSubmission = async (req, res) => {
     const {taskId} = req.params;
-    const studentId = 1; // req.user.id — заменить при подключении auth
+    const studentId = req.user.id;
 
     try {
         const submission = await prisma.taskSubmission.findFirst({
