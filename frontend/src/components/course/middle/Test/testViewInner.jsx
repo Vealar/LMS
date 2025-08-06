@@ -12,6 +12,7 @@ import {AttachmentManager} from "@/components/course/middle/commonElements/attac
 import StudentTestWrapper from "@/components/course/middle/Test/studentTestWrapper.jsx";
 import EditableTestEditor from "@/components/course/middle/Test/editableTestEditor.jsx";
 import {useCourseMutations} from "@/features/useCourseMutations.js";
+import {useDeleteBlockWithDialog} from "@/features/useDeleteBlockWithDialog.jsx";
 
 export function TestViewInner({test}) {
     const {
@@ -25,6 +26,7 @@ export function TestViewInner({test}) {
 
     const {updateBlock} = useCourseMutations(test.courseId);
     const questions = test.content?.questions || [];
+    const {renderDeleteButton} = useDeleteBlockWithDialog(test);
 
     return (
         <div className="w-full mx-auto px-6 mt-8 space-y-6">
@@ -76,6 +78,7 @@ export function TestViewInner({test}) {
                     />
                 )}
             </Card>
+            {renderDeleteButton(editing)}
         </div>
     );
 }

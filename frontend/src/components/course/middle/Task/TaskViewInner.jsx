@@ -14,6 +14,7 @@ import TaskSubmissionForm from "@/components/course/middle/Task/TaskSubmission/T
 import TaskFeedback from "@/components/course/middle/Task/TaskFeedback.jsx";
 import ConfirmDialog from "@/components/course/middle/Task/TaskSubmission/ConfirmDialog.jsx";
 import {AttachmentManager} from "@/components/course/middle/commonElements/attachmentManager.jsx";
+import {useDeleteBlockWithDialog} from "@/features/useDeleteBlockWithDialog.jsx";
 
 export function TaskViewInner({ task }) {
     const {
@@ -31,6 +32,7 @@ export function TaskViewInner({ task }) {
     const [dialogData, setDialogData] = useState(null);
 
     const { status, grade } = submission || {};
+    const {renderDeleteButton} = useDeleteBlockWithDialog(task);
 
     const handlePreSubmit = (formData) => {
         setDialogData(formData);
@@ -103,7 +105,7 @@ export function TaskViewInner({ task }) {
 
                 {!editing && <TaskFeedback feedback={feedback} />}
             </Card>
-
+            {renderDeleteButton(editing)}
             <ConfirmDialog
                 open={showDialog}
                 onOpenChange={setShowDialog}

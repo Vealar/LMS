@@ -65,7 +65,7 @@ model Topic {
 model Block {
   id          Int       @id @default(autoincrement())
   topicId     Int
-  topic       Topic     @relation(fields: [topicId], references: [id])
+  topic       Topic     @relation(fields: [topicId], references: [id], onDelete: Cascade)
   type        BlockType
   title       String
   description String?
@@ -75,18 +75,18 @@ model Block {
   createdAt   DateTime  @default(now())
 
   attachments    Attachment[]
-  submissions    TaskSubmission[]
+  TaskSubmission TaskSubmission[]
   TestSubmission TestSubmission[]
 }
 
 model TaskSubmission {
   id        Int              @id @default(autoincrement())
   taskId    Int
-  task      Block            @relation(fields: [taskId], references: [id])
+  task      Block            @relation(fields: [taskId], references: [id], onDelete: Cascade)
   studentId Int
   student   User             @relation(fields: [studentId], references: [id])
-  answer    String? // текстовый ответ (можно Markdown)
-  grade     Float? // оценка
+  answer    String?
+  grade     Float?
   status    SubmissionStatus @default(NOT_SUBMITTED)
   createdAt DateTime         @default(now())
   updatedAt DateTime         @updatedAt
@@ -98,7 +98,7 @@ model TaskSubmission {
 model FeedbackMessage {
   id           Int            @id @default(autoincrement())
   submissionId Int
-  submission   TaskSubmission @relation(fields: [submissionId], references: [id])
+  submission   TaskSubmission @relation(fields: [submissionId], references: [id], onDelete: Cascade)
   authorId     Int
   author       User           @relation(fields: [authorId], references: [id])
   content      String
@@ -110,27 +110,25 @@ model Attachment {
   fileName   String
   fileSize   Int?
   mimeType   String?
-  url        String // ссылка на S3
+  url        String
   uploadedAt DateTime @default(now())
 
-  // связи (может быть связано либо с блоком, либо с сабмишеном)
-  blockId      Int?
-  block        Block?          @relation(fields: [blockId], references: [id])
+  blockId Int?
+  block   Block? @relation(fields: [blockId], references: [id], onDelete: Cascade)
+
   submissionId Int?
-  submission   TaskSubmission? @relation(fields: [submissionId], references: [id])
+  submission   TaskSubmission? @relation(fields: [submissionId], references: [id], onDelete: Cascade)
 }
 
 model TestSubmission {
   id        Int   @id @default(autoincrement())
   taskId    Int
-  task      Block @relation(fields: [taskId], references: [id])
+  task      Block @relation(fields: [taskId], references: [id], onDelete: Cascade)
   studentId Int
   student   User  @relation(fields: [studentId], references: [id])
 
-  // JSON структура: { [questionId]: answer }, где answer: string | string[]
-  answers Json
-
-  grade     Float? // оценка
+  answers   Json
+  grade     Float?
   status    SubmissionStatus @default(NOT_SUBMITTED)
   createdAt DateTime         @default(now())
   updatedAt DateTime         @updatedAt
