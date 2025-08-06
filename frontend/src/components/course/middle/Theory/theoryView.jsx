@@ -7,6 +7,7 @@ import {EditableTitle} from "@/components/course/middle/commonElements/editableT
 import {EditableDescription} from "@/components/course/middle/commonElements/editableDescription.jsx";
 import {AttachmentManager} from "@/components/course/middle/commonElements/attachmentManager.jsx";
 import {useMeta} from "@/components/course/middle/commonElements/editableMetaForm.jsx";
+import {useDeleteBlockWithDialog} from "@/features/useDeleteBlockWithDialog.jsx";
 
 export function TheoryMetaSection() {
     const {title, setTitle, description, setDescription, editing} = useMeta();
@@ -22,7 +23,7 @@ export function TheoryMetaSection() {
 export default function TheoryView({theory}) {
     const {editing} = useEditing();
     const {updateBlock} = useCourseMutations(theory.courseId);
-
+    const { renderDeleteButton } = useDeleteBlockWithDialog(theory);
     return (
         <div className="w-full mx-auto px-6 mt-8">
             <Card className="rounded-xl p-6 bg-muted/50 space-y-6">
@@ -32,6 +33,7 @@ export default function TheoryView({theory}) {
 
                 <AttachmentManager blockId={theory.id} editing={editing}/>
             </Card>
+            {renderDeleteButton(editing)}
         </div>
     );
 }
