@@ -1,51 +1,55 @@
-import { useState, useEffect } from "react";
-import { Button } from "@/components/ui/button.jsx";
+import {Button} from "@/components/ui/button.jsx";
 import StudentTestPreview from "./studentTestPreview.jsx";
+import {useStartTestSubmission, useTestSubmission} from "@/features/useTestSubmission.js";
 
-export default function StudentTestWrapper({ testBlock }) {
-    const storageKey = `test-${testBlock.id}`;
-    const [started, setStarted] = useState(false);
-    const [submitted, setSubmitted] = useState(false);
+export default function StudentTestWrapper({testBlock}) {
+    const {data: submission, isLoading, refetch} = useTestSubmission(testBlock.id);
+    const startTest = useStartTestSubmission();
 
-    useEffect(() => {
-        const saved = JSON.parse(localStorage.getItem(storageKey));
-        if (saved?.submitted) {
-            setSubmitted(true);
-        } else if (saved?.startTime) {
-            setStarted(true);
-        }
-    }, [storageKey]);
-
-    const handleStart = () => {
-        const now = Date.now();
-        localStorage.setItem(storageKey, JSON.stringify({ startTime: now, answers: {} }));
-        setStarted(true);
+    const handleStart = async () => {
+        await startTest.mutateAsync(testBlock.id);
+        await refetch();
     };
 
-    const handleComplete = () => {
-        setSubmitted(true);
-        localStorage.setItem(storageKey, JSON.stringify({ submitted: true }));
-    };
+    if (isLoading) return <div>Загрузка...</div>;
 
-    if (submitted) {
+    const now = Date.now();
+    const submissionTime = submission?.createdAt ? new Date(submission.createdAt).getTime() : 0;
+    const timeLimit = (testBlock.timeLimit || 0) * 60 * 1000;
+    const deadline = submissionTime + timeLimit;
+    const timeRemaining = deadline - now;
+
+    const isActiveAttempt =
+        submission &&
+        submission.status === "NOT_SUBMITTED" &&
+        timeRemaining > 0;
+
+    if (isActiveAttempt) {
         return (
-            <div className="text-center text-muted-foreground mt-4">
+            <StudentTestPreview
+                testBlock={testBlock}
+                submission={submission}
+            />
+        );
+    }
+    if (isLoading) return <div>Загрузка...</div>;
+
+    if (submission?.submitted || submission?.status === "PENDING") {
+        return (
+            <div className="text-muted-foreground mt-4">
                 Вы уже прошли этот тест. Повторное прохождение невозможно.
             </div>
         );
     }
-
     return (
-        <>
-            {!started ? (
-                <div className="mt-4">
-                    <Button onClick={handleStart}>
-                        Начать попытку
-                    </Button>
-                </div>
-            ) : (
-                <StudentTestPreview testBlock={testBlock} onSubmitComplete={handleComplete} />
+        <div className="mt-4 space-y-2 text-muted-foreground">
+            {submission && submission.status === "NOT_SUBMITTED" && timeRemaining <= 0 && (
+                <p>Время на выполнение теста истекло.</p>
             )}
-        </>
+            {submission && submission.status !== "NOT_SUBMITTED" && (
+                <p>Вы уже отправили этот тест.</p>
+            )}
+            <Button onClick={handleStart}>Начать попытку</Button>
+        </div>
     );
 }

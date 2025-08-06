@@ -40,6 +40,7 @@ export const updateTestAnswers = async (blockId, studentId, answers) => {
         },
         data: {
             answers,
+            status: "PENDING",
             updatedAt: new Date(),
         },
     });

@@ -13,12 +13,12 @@ export const getTestSubmission = async (req, res) => {
 
         res.json(submission);
     } catch (err) {
-        console.error("Ошибка при получении попытки:", err);
         res.status(500).json({ message: "Ошибка сервера" });
     }
 };
 
 export const startTestSubmission = async (req, res) => {
+
     const { blockId } = req.params;
     const studentId = req.user?.id;
 

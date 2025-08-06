@@ -5,19 +5,19 @@ import requireRole from "../middleware/roleMiddleware.js";
 
 const router = express.Router();
 
-router.get("/tests/:blockId/submission",
+router.get("/:blockId/submission",
     authMiddleware,
     requireRole("STUDENT", "TEACHER", "ADMIN"),
     testController.getTestSubmission);
-router.post("/tests/:blockId/start",
+router.post("/:blockId/start",
     authMiddleware,
     requireRole("STUDENT", "TEACHER", "ADMIN"),
     testController.startTestSubmission);
-router.patch("/tests/:blockId/answers",
+router.patch("/:blockId/answers",
     authMiddleware,
     requireRole("STUDENT", "TEACHER", "ADMIN"),
     testController.updateTestAnswers);
-router.patch("/tests/submission/:submissionId/grade",
+router.patch("/submission/:submissionId/grade",
     authMiddleware,
     requireRole("STUDENT", "TEACHER", "ADMIN"),
     testController.gradeTestSubmission);
