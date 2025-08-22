@@ -43,6 +43,10 @@ cd backend
 ```bash
 npm install           
 ```
+4) Подключить prisma
+```bash
+npx prisma generate          
+```
 ### 3. Настройка frontend
 Перейдите в папку клиентской части:
 ```bash
