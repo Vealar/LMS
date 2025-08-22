@@ -28,7 +28,8 @@ cd backend
 ```
 
 2) Создайте .env файл в папке backend, пример содрежимого:
-    DATABASE_URL="postgresql://lms_user:lms_pass@localhost:5433/lms_db?schema=public"
+    DATABASE_URL="postgresql://lms_user:lms_pass@localhost:5433/lms_db?schema=public"  
+    (//возможно prisma будет выдавать ошибку подключения на Windows, поменяйте localhost -> 127.0.0.1)
     
     JWT_SECRET="PaM_Pam_PAM_PAM"
     
@@ -39,13 +40,14 @@ cd backend
     S3_SECRET_KEY=minioadmin
     S3_BUCKET=lms-files
     S3_REGION=us-east-1
-3) Установите зависимости 
+4) Установите зависимости 
 ```bash
 npm install           
 ```
 4) Подключить prisma
 ```bash
-npx prisma generate          
+npx prisma generate
+npx prisma migrate deploy
 ```
 ### 3. Настройка frontend
 Перейдите в папку клиентской части:
